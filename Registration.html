@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration - Blood Donation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #dc3545;
+      --secondary-color: #6c757d;
+      --dark-color: #343a40;
+      --light-color: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: all 0.3s ease;
+      background-color: var(--light-color);
+      color: #212529;
+    }
+    
+    body.dark-mode {
+      background-color: #121212;
+      color: #f8f9fa;
+    }
+    
+    body.dark-mode .navbar,
+    body.dark-mode footer {
+      background-color: #1a1a1a !important;
+    }
+    
+    body.dark-mode .form-control,
+    body.dark-mode .form-select {
+      background-color: #2d2d2d;
+      color: #f8f9fa;
+      border-color: #444;
+    }
+    
+    body.dark-mode .form-control:focus,
+    body.dark-mode .form-select:focus {
+      background-color: #2d2d2d;
+      color: #f8f9fa;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+    
+    body.dark-mode .card {
+      background-color: #1e1e1e;
+      border-color: #444;
+    }
+
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    body.dark-mode #preloader {
+      background-color: #121212;
+    }
+    
+    .blood-drop {
+      width: 80px;
+      height: 80px;
+      background-color: var(--primary-color);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      transform: rotate(-45deg);
+      position: relative;
+      animation: pulse 1.5s infinite ease-in-out, float 3s infinite ease-in-out;
+    }
+    
+    .blood-drop::before {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      top: -15px;
+      left: 25px;
+    }
+    
+    @keyframes pulse {
+      0% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.1); }
+      100% { transform: rotate(-45deg) scale(1); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: rotate(-45deg) translateY(0); }
+      50% { transform: rotate(-45deg) translateY(-15px); }
+    }
+    
+    body.loaded #preloader {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .blood-drops-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .blood-drops-bg .drop {
+      position: absolute;
+      width: 15px;
+      height: 22px;
+      background-color: rgba(220, 53, 69, 0.2);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      transform: rotate(-45deg);
+      animation: falling linear infinite;
+    }
+    
+    @keyframes falling {
+      0% {
+        transform: rotate(-45deg) translateY(-100px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: rotate(-45deg) translateY(calc(100vh + 100px));
+        opacity: 0;
+      }
+    }
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, rgba(220, 53, 69, 0.9), rgba(178, 42, 55, 0.9));
+    }
+    
+    body.dark-mode .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .registration-section {
+      background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                  url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      padding: 5rem 0;
+      min-height: calc(100vh - 120px);
+    }
+    
+    body.dark-mode .registration-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    
+    .registration-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(5px);
+    }
+    
+    body.dark-mode .registration-card {
+      background-color: rgba(30, 30, 30, 0.95);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .registration-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    body.dark-mode .registration-card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+    
+    .form-control, .form-select {
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+      transform: translateY(-2px);
+    }
+    
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: rotate(30deg);
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover::after {
+      left: 100%;
+    }
+    .blood-group-info {
+      background-color: rgba(220, 53, 69, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 30px;
+      border-left: 5px solid var(--primary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .blood-group-info:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);
+    }
+    
+    body.dark-mode .blood-group-info {
+      background-color: rgba(220, 53, 69, 0.2);
+    }
+    
+    .blood-group-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    
+    .blood-group-item:hover {
+      background-color: rgba(220, 53, 69, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .blood-group-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .blood-group-item:hover .blood-group-badge {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
+    }
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #dee2e6;
+      z-index: 1;
+      transition: all 0.3s ease;
+    }
+    
+    body.dark-mode .progress-steps::before {
+      background-color: #444;
+    }
+    
+    .step {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      width: 25%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .step:hover .step-number {
+      transform: scale(1.15);
+    }
+    
+    .step-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #dee2e6;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 5px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    body.dark-mode .step-number {
+      background-color: #444;
+      color: #aaa;
+    }
+    
+    .step.active .step-number {
+      background-color: var(--primary-color);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    .step-label {
+      font-size: 0.9rem;
+      color: #6c757d;
+      transition: all 0.3s ease;
+    }
+    
+    body.dark-mode .step-label {
+      color: #aaa;
+    }
+    
+    .step.active .step-label {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 99;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .floating-btn.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .floating-btn:hover {
+      transform: scale(1.1) translateY(0);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--dark-color), #1a1a1a);
+      padding: 2rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    .footer-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      background-color: var(--primary-color);
+      transform: translateY(-3px);
+    }
+
+    .custom-toast {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      border-left: 5px solid var(--primary-color);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+    
+    .custom-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toast-icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+      color: var(--primary-color);
+    }
+    .form-group-animate {
+      transition: all 0.5s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .form-group-animate.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background-color: var(--primary-color);
+      transition: all 0.3s ease;
+    }
+    
+    .section-title:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .registration-section {
+        padding: 3rem 0;
+        background-attachment: scroll;
+      }
+      
+      .progress-steps {
+        flex-wrap: wrap;
+      }
+      
+      .step {
+        width: 50%;
+        margin-bottom: 15px;
+      }
+      
+      .registration-card {
+        padding: 20px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="blood-drops-bg" id="bloodDropsBg"></div>
+  <div id="preloader">
+    <div class="blood-drop"></div>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold animate__animated animate__fadeInLeft" href="index.html">
+        <i class="fas fa-tint me-2"></i>Blood Donation
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="registation.html">Register</a></li>
+          <li class="nav-item"><a class="nav-link" href="donar.html">Find Donor</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item">
+            <button class="btn btn-sm btn-light ms-3" onclick="toggleDarkMode()">
+              <i class="fas fa-moon"></i>Dark Mode
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="registration-section">
+    <div class="container">
+      <div class="registration-card p-4 p-md-5 animate__animated animate__fadeInUp">
+        <div class="text-center mb-4">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
+               alt="Blood Donation" 
+               class="rounded-circle mb-3" 
+               style="width: 100px; height: 100px; object-fit: cover; border: 3px solid var(--primary-color);">
+          <h1 class="fw-bold section-title">Become a Blood Donor</h1>
+          <p class="text-muted">Join our lifesaving community by registering as a blood donor</p>
+        </div>
+   
+        <div class="progress-steps">
+          <div class="step active">
+            <div class="step-number">1</div>
+            <div class="step-label">Personal Info</div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-label">Health Info</div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-label">Contact Details</div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-label">Complete</div>
+          </div>
+        </div>
+        
+        <form class="needs-validation" id="donorForm" novalidate>
+          <div class="form-group-animate show">
+            <h5 class="mb-3"><i class="fas fa-user me-2"></i>Personal Information</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="fullName" required>
+                <div class="invalid-feedback">Please enter your full name.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="dob" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dob" required>
+                <div class="invalid-feedback">Please enter your date of birth.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="gender" class="form-label">Gender</label>
+                <select class="form-select" id="gender" required>
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="invalid-feedback">Please select your gender.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="weight" class="form-label">Weight (kg)</label>
+                <input type="number" class="form-control" id="weight" min="50" required>
+                <div class="invalid-feedback">Minimum weight for donation is 50kg.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-animate mt-4">
+            <h5 class="mb-3"><i class="fas fa-tint me-2"></i>Blood Information</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="bloodGroup" class="form-label">Blood Group</label>
+                <select class="form-select" id="bloodGroup" required>
+                  <option value="">Select Blood Group</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+                <div class="invalid-feedback">Please select a blood group.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="lastDonation" class="form-label">Last Donation Date</label>
+                <input type="date" class="form-control" id="lastDonation">
+                <small class="text-muted">Leave blank if never donated</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group-animate mt-4">
+            <h5 class="mb-3"><i class="fas fa-address-card me-2"></i>Contact Information</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" required>
+                <div class="invalid-feedback">Please enter your city.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="state" class="form-label">State/Province</label>
+                <input type="text" class="form-control" id="state" required>
+                <div class="invalid-feedback">Please enter your state/province.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" required>
+                <div class="invalid-feedback">Please enter your phone number.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group-animate mt-4">
+            <h5 class="mb-3"><i class="fas fa-heartbeat me-2"></i>Health Information</h5>
+            <div class="mb-3">
+              <label class="form-label">Do you have any of the following conditions?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="hivCheck">
+                <label class="form-check-label" for="hivCheck">HIV/AIDS</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="hepatitisCheck">
+                <label class="form-check-label" for="hepatitisCheck">Hepatitis B or C</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="heartCheck">
+                <label class="form-check-label" for="heartCheck">Heart Disease</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Have you had any of these in the past 6 months?</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="surgeryCheck">
+                <label class="form-check-label" for="surgeryCheck">Major Surgery</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="tattooCheck">
+                <label class="form-check-label" for="tattooCheck">Tattoo or Piercing</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="pregnancyCheck">
+                <label class="form-check-label" for="pregnancyCheck">Pregnancy</label>
+              </div>
+            </div>
+          </div>
+ 
+          <div class="form-group-animate mt-4">
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="termsCheck" required>
+              <label class="form-check-label" for="termsCheck">
+                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> of blood donation
+              </label>
+              <div class="invalid-feedback">You must agree before submitting.</div>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary w-100 py-3 mt-2">
+            <i class="fas fa-user-plus me-2"></i> Register as Donor
+          </button>
+        </form>
+
+        <div class="blood-group-info mt-5 animate__animated animate__fadeIn">
+          <h5><i class="fas fa-info-circle me-2"></i>About Blood Types</h5>
+          <p class="mb-4">Knowing your blood type is important for donation. Here's a quick reference:</p>
+          
+          <div class="blood-group-item">
+            <div class="blood-group-badge">A+</div>
+            <div>
+              <strong>A+</strong> can donate to A+ and AB+
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">A-</div>
+            <div>
+              <strong>A-</strong> can donate to A+, A-, AB+, AB-
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">B+</div>
+            <div>
+              <strong>B+</strong> can donate to B+ and AB+
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">B-</div>
+            <div>
+              <strong>B-</strong> can donate to B+, B-, AB+, AB-
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">O+</div>
+            <div>
+              <strong>O+</strong> can donate to O+, A+, B+, AB+
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">O-</div>
+            <div>
+              <strong>O-</strong> can donate to all blood types (universal donor)
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">AB+</div>
+            <div>
+              <strong>AB+</strong> can donate to AB+ (universal recipient)
+            </div>
+          </div>
+          <div class="blood-group-item">
+            <div class="blood-group-badge">AB-</div>
+            <div>
+              <strong>AB-</strong> can donate to AB+ and AB-
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-content">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h5 class="text-uppercase mb-4">Blood Donation</h5>
+          <p>Saving lives through blood donation. Join our community of donors and help make a difference in people's lives every day.</p>
+          <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="index.html" class="text-white text-decoration-none">Home</a></li>
+            <li class="mb-2"><a href="registation.html" class="text-white text-decoration-none">Register</a></li>
+            <li class="mb-2"><a href="donar.html" class="text-white text-decoration-none">Find Donor</a></li>
+            <li class="mb-2"><a href="contact.html" class="text-white text-decoration-none">Contact</a></li>
+            <li class="mb-2"><a href="#" class="text-white text-decoration-none">About Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Contact Info</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Greater Noida,UP</li>
+            <li class="mb-2"><i class="fas fa-phone-alt me-2"></i> +91 1234567890</li>
+            <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@blooddonation.org</li>
+            <li class="mb-2"><i class="fas fa-clock me-2"></i> Mon-Fri: 9am-6pm</li>
+          </ul>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
+          <h5 class="text-uppercase mb-4">Newsletter</h5>
+          <p>Subscribe to our newsletter for updates on blood drives and donation campaigns.</p>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Your Email">
+            <button class="btn btn-danger" type="button">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      
+      <hr class="my-4 bg-secondary">
+      
+      <div class="text-center">
+        <p class="mb-0">&copy; 2025 Blood Donation Portal. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <div class="floating-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+  <div class="modal fade" id="termsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Terms and Conditions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Blood Donation Terms</h6>
+          <p>By registering as a blood donor, you agree to the following terms:</p>
+          <ul>
+            <li>You meet the eligibility requirements for blood donation in your region</li>
+            <li>All information provided is accurate and truthful</li>
+            <li>You understand that your contact information may be shared with patients in need</li>
+            <li>You consent to being contacted for blood donation requests</li>
+            <li>You will update your profile if your health status changes</li>
+          </ul>
+          <h6 class="mt-4">Privacy Policy</h6>
+          <p>We respect your privacy. Your personal information will only be used for blood donation purposes and will not be shared with third parties for marketing.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050">
+    <div id="liveToast" class="toast custom-toast align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center">
+          <i class="fas fa-check-circle toast-icon"></i>
+          <div>
+            <strong>Registration Successful!</strong><br>
+            Thank you for joining our donor community.
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 1000);
+    });
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDark);
+      const darkModeBtn = document.querySelector('.btn-light[onclick="toggleDarkMode()"]');
+      if (isDark) {
+        darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Toggle Light Mode';
+      } else {
+        darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Toggle Dark Mode';
+      }
+    }
+    function createBloodDrops() {
+      const container = document.getElementById('bloodDropsBg');
+      const dropCount = 20;
+      
+      for (let i = 0; i < dropCount; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'drop';
+        const size = Math.random() * 10 + 5;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 5 + 5;
+        
+        drop.style.width = `${size}px`;
+        drop.style.height = `${size * 1.5}px`;
+        drop.style.left = `${left}%`;
+        drop.style.animationDelay = `${delay}s`;
+        drop.style.animationDuration = `${duration}s`;
+        
+        container.appendChild(drop);
+      }
+    }
+    function handleScroll() {
+      const floatingBtn = document.querySelector('.floating-btn');
+      if (window.scrollY > 300) {
+        floatingBtn.classList.add('visible');
+      } else {
+        floatingBtn.classList.remove('visible');
+      }
+    }
+    window.onload = function() {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        const darkModeBtn = document.querySelector('.btn-light[onclick="toggleDarkMode()"]');
+        if (darkModeBtn) {
+          darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Toggle Light Mode';
+        }
+      }
+      createBloodDrops();
+      window.addEventListener('scroll', handleScroll);
+      const animateElements = document.querySelectorAll('.form-group-animate');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+      
+      animateElements.forEach(element => {
+        observer.observe(element);
+      });
+    };
+    (function() {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          } else {
+            event.preventDefault();
+            const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            toast.show();
+            const donorData = {
+              name: document.getElementById('fullName').value,
+              bloodGroup: document.getElementById('bloodGroup').value,
+              city: document.getElementById('city').value,
+              phone: document.getElementById('phone').value,
+              email: document.getElementById('email').value,
+              lastDonation: document.getElementById('lastDonation').value
+            };
+            
+            let donors = JSON.parse(localStorage.getItem('donors')) || [];
+            donors.push(donorData);
+            localStorage.setItem('donors', JSON.stringify(donors));
+            setTimeout(() => {
+              form.reset();
+              form.classList.remove('was-validated');
+            }, 3000);
+          }
+          
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+    document.querySelectorAll('.blood-group-item').forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.style.transform = 'translateX(5px)';
+      });
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = 'translateX(0)';
+      });
+    });
+    document.querySelectorAll('.step').forEach(step => {
+      step.addEventListener('click', function() {
+        const stepNumber = parseInt(this.querySelector('.step-number').textContent);
+        scrollToFormSection(stepNumber);
+      });
+    });
+    
+    function scrollToFormSection(stepNumber) {
+      const sections = document.querySelectorAll('.form-group-animate');
+      if (stepNumber <= sections.length) {
+        sections[stepNumber - 1].scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
+    }
+  </script>
+</body>
+</html>

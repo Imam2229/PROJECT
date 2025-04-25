@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | BloodConnect</title>
+  <meta name="description" content="Get in touch with our blood donation team. We're here to answer your questions and help save lives.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+  <style>
+    :root {
+      --primary-color: #dc3545;
+      --secondary-color: #6c757d;
+      --dark-color: #343a40;
+      --light-color: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      transition: all 0.3s ease;
+      background-color: var(--light-color);
+      color: #212529;
+    }
+    
+    body.dark-mode {
+      background-color: #121212;
+      color: #f8f9fa;
+    }
+    
+    body.dark-mode .navbar,
+    body.dark-mode footer {
+      background-color: #1a1a1a !important;
+    }
+    
+    body.dark-mode .form-control,
+    body.dark-mode .form-select {
+      background-color: #2d2d2d;
+      color: #f8f9fa;
+      border-color: #444;
+    }
+    
+    body.dark-mode .form-control:focus,
+    body.dark-mode .form-select:focus {
+      background-color: #2d2d2d;
+      color: #f8f9fa;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+    
+    body.dark-mode .card {
+      background-color: #1e1e1e;
+      border-color: #444;
+    }
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    body.dark-mode #preloader {
+      background-color: #121212;
+    }
+    
+    .blood-drop {
+      width: 80px;
+      height: 80px;
+      background-color: var(--primary-color);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      transform: rotate(-45deg);
+      position: relative;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    
+    .blood-drop::before {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      top: -15px;
+      left: 25px;
+    }
+    
+    .loading-text {
+      margin-top: 20px;
+      font-weight: 500;
+      color: var(--primary-color);
+      animation: fadeInOut 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-45deg) scale(1.1); }
+      100% { transform: rotate(-45deg) scale(1); }
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+    
+    body.loaded #preloader {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    body.dark-mode .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    .contact-hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 6rem 0;
+      position: relative;
+    }
+    
+    .contact-hero h1 {
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .contact-section {
+      padding: 5rem 0;
+    }
+    
+    .contact-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    
+    body.dark-mode .contact-card {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    body.dark-mode .contact-card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+    
+    .contact-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .contact-info-item:hover .contact-icon {
+      transform: scale(1.1);
+    }
+    
+    .form-control, .form-select {
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+      transform: translateY(-2px);
+    }
+    .map-container {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      height: 300px;
+    }
+    
+    body.dark-mode .map-container {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    #successMessage {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-3px) scale(1.1);
+    }
+    
+    .facebook { background-color: #3b5998; }
+    .twitter { background-color: #1da1f2; }
+    .instagram { background-color: #e1306c; }
+    .linkedin { background-color: #0077b5; }
+    .whatsapp { background-color: #25D366; }
+    .emergency-banner {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .emergency-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.1) 10px,
+        transparent 10px,
+        transparent 20px
+      );
+      animation: slide 30s linear infinite;
+    }
+    
+    @keyframes slide {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 0; }
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 99;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: pulse 2s infinite;
+    }
+    
+    .floating-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    footer {
+      background-color: var(--dark-color);
+      padding: 2rem 0;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 1rem;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    .form-group-animate {
+      transition: all 0.5s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .form-group-animate.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+body.dark-mode .dark-mode-contact {
+  background-color: #2d2d2d !important;
+  border: 1px solid #444;
+}
+
+body.dark-mode .dark-mode-contact-item {
+  background-color: #3a3a3a !important;
+  border: 1px solid #444;
+  border-radius: 8px;
+}
+
+body.dark-mode .dark-mode-contact-text {
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .dark-mode-contact-icon {
+  color: #dc3545 !important;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+body.dark-mode .social-icons a {
+  color: #f8f9fa !important;
+  background-color: #3a3a3a !important;
+}
+
+body.dark-mode .social-icons a:hover {
+  color: #dc3545 !important;
+}
+body.dark-mode .map-container {
+  filter: grayscale(30%) brightness(0.8);
+}
+body.dark-mode .faq-section {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-mode .dark-mode-faq-title {
+  color: #fff !important;
+}
+
+body.dark-mode .dark-mode-faq-subtitle {
+  color: #ddd !important;
+}
+
+body.dark-mode .dark-mode-faq-item {
+  background-color: #3a3a3a !important;
+  border: 1px solid #444 !important;
+}
+
+body.dark-mode .dark-mode-faq-button {
+  background-color: #3a3a3a !important;
+  color: #fff !important;
+}
+
+body.dark-mode .dark-mode-faq-button:not(.collapsed) {
+  background-color: #444 !important;
+  color: #fff !important;
+  box-shadow: none;
+}
+
+body.dark-mode .dark-mode-faq-button:focus {
+  box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+body.dark-mode .dark-mode-faq-collapse {
+  background-color: #3a3a3a !important;
+}
+
+body.dark-mode .dark-mode-faq-body {
+  background-color: #3a3a3a !important;
+  color: #eee !important;
+}
+body.dark-mode .accordion-button::after {
+  filter: brightness(0) invert(1);
+}
+  </style>
+</head>
+<body>
+  <div id="preloader">
+    <div class="blood-drop animate__animated animate__pulse animate__infinite"></div>
+    <p class="loading-text">Loading Contact Portal...</p>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <i class="fas fa-heartbeat me-2"></i>
+        <span>BloodConnect</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="Home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="Registration.html">Register</a></li>
+          <li class="nav-item"><a class="nav-link" href="Donar.html">Find Donor</a></li>
+          <li class="nav-item"><a class="nav-link" href="About.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="Contact.html">Contact</a></li>
+          <li class="nav-item">
+            <button class="btn btn-sm btn-outline-light ms-3" onclick="toggleDarkMode()" id="darkModeToggle">
+              <i class="fas fa-moon"></i> Dark Mode
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="contact-hero text-center d-flex align-items-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInDown">We're Here to Help</h1>
+      <p class="lead mb-4 animate__animated animate__fadeIn animate__delay-1s">Contact our team for any questions about blood donation or our services</p>
+      <div class="d-flex justify-content-center gap-3 animate__animated animate__fadeIn animate__delay-2s">
+        <a href="#contactForm" class="btn btn-danger btn-lg px-4 py-2">
+          <i class="fas fa-envelope me-2"></i>Send Message
+        </a>
+        <a href="#emergency" class="btn btn-outline-light btn-lg px-4 py-2">
+          <i class="fas fa-phone me-2"></i>Emergency Contact
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="emergency-banner" id="emergency">
+    <div class="container text-center position-relative">
+      <div class="row align-items-center">
+        <div class="col-md-8 text-md-start">
+          <h4 class="mb-3 mb-md-0"><i class="fas fa-exclamation-triangle me-2"></i> Need immediate assistance?</h4>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a href="tel:+18005551234" class="btn btn-light btn-lg">
+            <i class="fas fa-phone me-2"></i> Call Now: 1-800-555-1234
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<section class="contact-section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="contact-card bg-white p-4 p-md-5 h-100 dark-mode-contact">
+          <h2 class="mb-4 dark-mode-contact-heading">Send Us a Message</h2>
+          <form id="contactForm" class="needs-validation" novalidate>
+            <div class="form-group-animate show">
+              <div class="mb-3">
+                <label for="name" class="form-label dark-mode-contact-label">Full Name</label>
+                <input type="text" class="form-control dark-mode-contact-input" id="name" required>
+                <div class="invalid-feedback dark-mode-contact-text">Please enter your name.</div>
+              </div>
+            </div>
+            <div class="form-group-animate">
+              <div class="mb-3">
+                <label for="email" class="form-label dark-mode-contact-label">Email</label>
+                <input type="email" class="form-control dark-mode-contact-input" id="email" required>
+                <div class="invalid-feedback dark-mode-contact-text">Please enter a valid email.</div>
+              </div>
+            </div>
+            <div class="form-group-animate">
+              <div class="mb-3">
+                <label for="subject" class="form-label dark-mode-contact-label">Subject</label>
+                <select class="form-select dark-mode-contact-input" id="subject" required>
+                  <option value="" selected disabled class="dark-mode-contact-option">Select a subject</option>
+                  <option value="donation" class="dark-mode-contact-option">Blood Donation Inquiry</option>
+                  <option value="drive" class="dark-mode-contact-option">Organize Blood Drive</option>
+                  <option value="volunteer" class="dark-mode-contact-option">Volunteer Opportunity</option>
+                  <option value="partnership" class="dark-mode-contact-option">Partnership Inquiry</option>
+                  <option value="other" class="dark-mode-contact-option">Other</option>
+                </select>
+                <div class="invalid-feedback dark-mode-contact-text">Please select a subject.</div>
+              </div>
+            </div>
+            <div class="form-group-animate">
+              <div class="mb-3">
+                <label for="message" class="form-label dark-mode-contact-label">Message</label>
+                <textarea class="form-control dark-mode-contact-input" id="message" rows="5" required></textarea>
+                <div class="invalid-feedback dark-mode-contact-text">Please enter a message.</div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-danger w-100 py-3 mt-2">
+              <i class="fas fa-paper-plane me-2"></i> Send Message
+            </button>
+          </form>
+          
+          <div id="successMessage" class="alert alert-success mt-4 animate__animated animate__fadeIn dark-mode-contact-alert">
+            <i class="fas fa-check-circle me-2"></i> Thank you! Your message has been sent successfully. We'll respond within 24 hours.
+          </div>
+        </div>
+      </div>
+
+<div class="col-lg-6" data-aos="fade-left">
+    <div class="contact-card bg-white p-4 p-md-5 h-100 dark-mode-contact">
+      <h2 class="mb-4 dark-mode-contact-text">Contact Information</h2>
+      
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="contact-info-item text-center p-3 dark-mode-contact-item">
+            <div class="contact-icon dark-mode-contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h5 class="dark-mode-contact-text">Our Location</h5>
+            <p class="mb-0 dark-mode-contact-text">123 Blood Drive Ave<br>Suite 100<br>New York, NY 10001</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="contact-info-item text-center p-3 dark-mode-contact-item">
+            <div class="contact-icon dark-mode-contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <h5 class="dark-mode-contact-text">Phone Number</h5>
+            <p class="mb-0 dark-mode-contact-text">+1 (800) 555-1234<br>Mon-Fri, 9am-5pm EST</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="contact-info-item text-center p-3 dark-mode-contact-item">
+            <div class="contact-icon dark-mode-contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h5 class="dark-mode-contact-text">Email Address</h5>
+            <p class="mb-0 dark-mode-contact-text">info@bloodconnect.org<br>support@bloodconnect.org</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="contact-info-item text-center p-3 dark-mode-contact-item">
+            <div class="contact-icon dark-mode-contact-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h5 class="dark-mode-contact-text">Working Hours</h5>
+            <p class="mb-0 dark-mode-contact-text">Monday - Friday: 9am - 6pm<br>Saturday: 10am - 4pm</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-5">
+        <h5 class="mb-3 dark-mode-contact-text">Connect With Us</h5>
+        <div class="social-icons">
+          <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon linkedin"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://wa.me/+1234567890" class="social-icon whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      
+      <div class="map-container mt-4">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215373510478!2d-73.9878449241644!3d40.74844097138968!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1689876543210!5m2!1sen!2sus" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+
+<section class="py-5 bg-light faq-section">
+    <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <h2 class="section-title dark-mode-faq-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle dark-mode-faq-subtitle">Find quick answers to common questions</p>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item mb-3 border-0 shadow-sm dark-mode-faq-item" data-aos="fade-up">
+              <h3 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed dark-mode-faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                  How quickly will I receive a response to my inquiry?
+                </button>
+              </h3>
+              <div id="collapseOne" class="accordion-collapse collapse dark-mode-faq-collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body dark-mode-faq-body">
+                  We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call our emergency line for immediate assistance.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item mb-3 border-0 shadow-sm dark-mode-faq-item" data-aos="fade-up" data-aos-delay="50">
+              <h3 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed dark-mode-faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                  Can I organize a blood drive at my workplace or community?
+                </button>
+              </h3>
+              <div id="collapseTwo" class="accordion-collapse collapse dark-mode-faq-collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body dark-mode-faq-body">
+                  Absolutely! We'd love to help you organize a blood drive. Please fill out the contact form with details about your proposed event, and our blood drive coordinator will contact you to discuss the next steps.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item mb-3 border-0 shadow-sm dark-mode-faq-item" data-aos="fade-up" data-aos-delay="100">
+              <h3 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed dark-mode-faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                  What information should I include in my message?
+                </button>
+              </h3>
+              <div id="collapseThree" class="accordion-collapse collapse dark-mode-faq-collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body dark-mode-faq-body">
+                  Please include your full name, contact information, and as much detail as possible about your inquiry. For blood donation questions, include your blood type if known. For partnership inquiries, include information about your organization.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item mb-3 border-0 shadow-sm dark-mode-faq-item" data-aos="fade-up" data-aos-delay="150">
+              <h3 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed dark-mode-faq-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                  How can I volunteer with your organization?
+                </button>
+              </h3>
+              <div id="collapseFour" class="accordion-collapse collapse dark-mode-faq-collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body dark-mode-faq-body">
+                  We're always looking for passionate volunteers! Please select "Volunteer Opportunity" from the subject dropdown in our contact form and tell us about your skills and availability. We'll contact you with current volunteer opportunities.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-dark text-white pt-5 pb-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h5 class="text-uppercase mb-4">BloodConnect</h5>
+          <p>Connecting donors with those in need since 2015. Our mission is to make blood donation accessible to everyone.</p>
+          <div class="social-icons mt-4">
+            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><a href="Home.html" class="text-white">Home</a></li>
+            <li class="mb-2"><a href="About.html" class="text-white">About Us</a></li>
+            <li class="mb-2"><a href="Registration.html" class="text-white">Register</a></li>
+            <li class="mb-2"><a href="Donar.html" class="text-white">Find Donor</a></li>
+            <li class="mb-2"><a href="Contact.html" class="text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase mb-4">Contact Us</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>Sec 62 Noida, Medical City</li>
+            <li class="mb-2"><i class="fas fa-phone me-2"></i>+91 6123456789</li>
+            <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@bloodconnect.org</li>
+            <li><i class="fas fa-clock me-2"></i> 24/7 Emergency Line</li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="text-uppercase mb-4">Newsletter</h5>
+          <p>Subscribe to receive updates and donation requests.</p>
+          <form class="mb-3">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Your Email">
+              <button class="btn btn-danger" type="submit">Subscribe</button>
+            </div>
+          </form>
+          <small class="text-muted">We'll never share your email with anyone else.</small>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; 2025 BloodConnect. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <ul class="list-inline mb-0">
+            <li class="list-inline-item"><a href="#" class="text-white">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-white">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <a href="#" class="btn btn-danger btn-lg floating-btn" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('preloader').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('preloader').style.display = 'none';
+        }, 500);
+      }, 1000);
+    });
+
+    function toggleDarkMode() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', isDark);
+      const icon = document.querySelector('#darkModeToggle i');
+      if (isDark) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+      }
+    }
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+
+    (function() {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          } else {
+            event.preventDefault();
+            document.getElementById('successMessage').style.display = 'block';
+            form.reset();
+            form.classList.remove('was-validated');
+            setTimeout(() => {
+              document.getElementById('successMessage').scrollIntoView({
+                behavior: 'smooth'
+              });
+            }, 100);
+          }
+          
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+    
+    const animateElements = document.querySelectorAll('.form-group-animate');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+    
+    animateElements.forEach(element => {
+      observer.observe(element);
+    });
+    const backToTopButton = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopButton.style.display = 'flex';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+    
+    backToTopButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
